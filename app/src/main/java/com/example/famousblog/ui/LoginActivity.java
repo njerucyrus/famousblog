@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.famousblog.data.UserRepository;
 import com.example.famousblog.databinding.ActivityLoginBinding;
 import com.example.famousblog.models.User;
+import com.example.famousblog.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
@@ -38,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (validateInput()) {
                     User user = repository.login(mBinding.txtUsername.getText().toString().trim(), mBinding.txtPassword.getText().toString().trim());
                     if (user != null) {
+                        Utils.persistUser(getApplicationContext(), user);
+                        Utils.logUser(getApplicationContext());
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
@@ -75,5 +78,14 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return isValid;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Utils.isLoggedIn(this)) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 }

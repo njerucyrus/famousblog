@@ -9,12 +9,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.famousblog.data.UserRepository;
 import com.example.famousblog.databinding.ActivityLoginBinding;
+import com.example.famousblog.models.User;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding mBinding;
+    private UserRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +30,19 @@ public class LoginActivity extends AppCompatActivity {
             actionBar.setElevation(0f);
         }
 
+        repository = UserRepository.getInstance(getApplication());
+
         mBinding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateInput()) {
-                    Toast.makeText(LoginActivity.this, "Validation succeeded", Toast.LENGTH_SHORT).show();
+                    User user = repository.login(mBinding.txtUsername.getText().toString().trim(), mBinding.txtPassword.getText().toString().trim());
+                    if (user != null) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Invalid Username/password", Toast.LENGTH_SHORT).show();
+                    }
                 }else {
                     Snackbar.make(v, "Fix the errors above", Snackbar.LENGTH_LONG).show();
                 }

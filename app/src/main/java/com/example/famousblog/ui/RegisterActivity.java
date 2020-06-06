@@ -6,21 +6,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.famousblog.R;
+import com.example.famousblog.data.UserRepository;
 import com.example.famousblog.databinding.ActivityRegisterBinding;
+import com.example.famousblog.models.User;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    private static final String TAG = "RegisterActivity";
     private ActivityRegisterBinding mBinding;
+    private UserRepository repository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,14 +36,27 @@ public class RegisterActivity extends AppCompatActivity {
             actionBar.setElevation(0f);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        repository = UserRepository.getInstance(getApplication());
 
         mBinding.btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //IMPLEMENTATION HERE
                 if (validateInput()) {
-                    //
-                    Toast.makeText(RegisterActivity.this, "Validation succeeded you can now register ", Toast.LENGTH_SHORT).show();
+                    User user = new User(
+                            mBinding.txtUsername.getText().toString().trim(),
+                            mBinding.txtEmail.getText().toString().trim(),
+                            mBinding.txtPhoneNumber.getText().toString().trim(),
+                            mBinding.txtName.getText().toString().trim()
+                    );
+                    user.setPassword(mBinding.txtPassword.getText().toString().trim());
+                    Log.d(TAG, "onClick: "+user.toString());
+                    long rowId = repository.saveUser(user);
+                    if (rowId > 0) {
+                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        finish();
+                    }
+
                 } else {
                     Snackbar.make(v, "Fix the errors above", Snackbar.LENGTH_LONG).show();
                 }

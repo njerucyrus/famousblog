@@ -1,16 +1,32 @@
 package com.example.famousblog.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+@Entity(indices = {@Index(value = {"username"}, unique = true )})
 public class User {
+    @PrimaryKey(autoGenerate = true)
     private int id;
+    @ColumnInfo(name = "username")
     private String username;
+    @ColumnInfo(name = "password")
     private String password;
+    @ColumnInfo(name = "email")
     private String email;
+    @ColumnInfo(name = "phone_number")
     private String phoneNumber;
+    @ColumnInfo(name = "name")
     private String name;
 
     public User() {
+
     }
 
+    @Ignore
     public User(String username, String email, String phoneNumber, String name) {
         this.username = username;
         this.email = email;

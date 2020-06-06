@@ -1,8 +1,10 @@
-package com.example.famousblog;
+package com.example.famousblog.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.famousblog.R;
 
 public class MainActivity extends AppCompatActivity {
 

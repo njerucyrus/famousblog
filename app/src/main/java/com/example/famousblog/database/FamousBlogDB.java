@@ -6,10 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.famousblog.interfaces.PostDao;
 import com.example.famousblog.interfaces.UserDao;
+import com.example.famousblog.models.Post;
 import com.example.famousblog.models.User;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Post.class}, version = 2, exportSchema = false)
 
 public abstract class FamousBlogDB extends RoomDatabase {
     private static FamousBlogDB instance;
@@ -29,4 +31,5 @@ public abstract class FamousBlogDB extends RoomDatabase {
     }
 
     public abstract UserDao userDao();
+    public abstract PostDao postDao();
 }

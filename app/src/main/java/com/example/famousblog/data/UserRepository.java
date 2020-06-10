@@ -1,16 +1,12 @@
 package com.example.famousblog.data;
 
 import android.app.Application;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.webkit.RenderProcessGoneDetail;
 import android.widget.Toast;
 
 import com.example.famousblog.database.FamousBlogDB;
 import com.example.famousblog.models.User;
-import com.example.famousblog.ui.RegisterActivity;
 
-import java.util.PropertyResourceBundle;
 import java.util.concurrent.ExecutionException;
 
 public class UserRepository {
@@ -54,7 +50,7 @@ public class UserRepository {
         private FamousBlogDB db;
 
 
-        public LoginTask(Application application, String username, String password) {
+         LoginTask(Application application, String username, String password) {
             this.username = username;
             this.password = password;
             db = FamousBlogDB.getDatabase(application);
@@ -75,7 +71,7 @@ public class UserRepository {
         private FamousBlogDB db;
         private Application application;
 
-        public SaveUserTask(Application application) {
+         SaveUserTask(Application application) {
             this.application = application;
             db = FamousBlogDB.getDatabase(application);
         }

@@ -39,6 +39,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_post"
        android:layout_margin="16dp"
         android:layout_gravity="end"
         android:text="POST"

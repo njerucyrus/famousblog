@@ -1,12 +1,25 @@
 package com.example.famousblog.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Post {
-    private int id;
+    @PrimaryKey(autoGenerate = true)
+    private int postId;
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "body")
     private String body;
+    @ColumnInfo(name = "date")
     private String date;
+    @Embedded
     private User postedBy;
 
+    @Ignore
     public Post(String title, String body, String date, User postedBy) {
         this.title = title;
         this.body = body;
@@ -16,12 +29,12 @@ public class Post {
 
     public Post() {}
 
-    public int getId() {
-        return id;
+    public int getPostId() {
+        return postId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
     public String getTitle() {
@@ -59,7 +72,7 @@ public class Post {
     @Override
     public String toString() {
         return "Post{" +
-                "id=" + id +
+                "id=" + postId +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 ", date='" + date + '\'' +

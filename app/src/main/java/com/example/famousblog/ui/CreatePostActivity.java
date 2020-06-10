@@ -1,5 +1,6 @@
 package com.example.famousblog.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -51,7 +52,11 @@ public class CreatePostActivity extends AppCompatActivity {
 
                     );
 
-                    repository.savePost(post);
+                   long created = repository.savePost(post);
+                   if (created > 0) {
+                       startActivity(new Intent(CreatePostActivity.this, MainActivity.class));
+                       finish();
+                   }
 
                 } else {
                     Snackbar.make(v, "Fix the errors above", Snackbar.LENGTH_LONG).show();

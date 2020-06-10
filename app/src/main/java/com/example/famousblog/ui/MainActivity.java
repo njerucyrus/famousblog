@@ -3,6 +3,9 @@ package com.example.famousblog.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +14,20 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.famousblog.R;
+import com.example.famousblog.adapters.PostAdapter;
+import com.example.famousblog.data.PostRepository;
 import com.example.famousblog.databinding.ActivityMainBinding;
+import com.example.famousblog.interfaces.RecyclerViewItemClickListener;
+import com.example.famousblog.models.Post;
 import com.example.famousblog.models.User;
 import com.example.famousblog.utils.Utils;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewItemClickListener<Post> {
 
     private ActivityMainBinding mBinding;
+    private PostAdapter adapter;
+    private PostRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +41,19 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setElevation(0f);
 
         }
+        repository = PostRepository.getInstance(getApplication());
+        adapter = new PostAdapter(this, this);
+        showPosts();
 
+
+    }
+
+    private void showPosts() {
+        adapter.setData(repository.fetchPosts());
+        mBinding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mBinding.postsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mBinding.postsRecyclerView.setAdapter(adapter);
+        mBinding.postsRecyclerView.setHasFixedSize(true);
 
     }
 
@@ -86,5 +107,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+    }
+
+    @Override
+    public void onItemClicked(Post post) {
+        Toast.makeText(this, "Title "+post.getTitle()+" POSTED BY "+post.getPostedBy().getName(), Toast.LENGTH_LONG ).show();
     }
 }

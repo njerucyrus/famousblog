@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.famousblog.databinding.PostItemLayoutBinding;
 import com.example.famousblog.interfaces.RecyclerViewItemClickListener;
 import com.example.famousblog.models.Post;
+import com.example.famousblog.models.User;
+import com.example.famousblog.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +37,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        User loggedInUser = Utils.getPersistedUser(context);
         final Post post = posts.get(position);
         holder.mBinding.tvTitle.setText(post.getTitle());
         holder.mBinding.tvBody.setText(post.getBody());
+        holder.mBinding.tvDatePosted.setText(post.getDate());
+        holder.mBinding.postedBy.setText(post.getPostedBy().getName());
+        if (loggedInUser.getUsername().equals(post.getPostedBy().getUsername())) {
+            holder.mBinding.btnDelete.setVisibility(View.VISIBLE);
+        } else {
+            holder.mBinding.btnDelete.setVisibility(View.GONE);
+
+        }
         holder.mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onItemClicked(post);
+            }
+        });
+        holder.mBinding.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Toast.makeText(context, "Could have deleted", Toast.LENGTH_SHORT).show();
             }
         });
     }
